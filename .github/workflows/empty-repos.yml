@@ -1,0 +1,82 @@
+name: "Empty repo check"
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'  # 00:00 UTC on day 1 of every month
+  workflow_dispatch:      # also allow manual runs
+
+permissions:
+  contents: read
+  issues: write
+
+env:
+  SCAN_ORG: YOUR-ORG-HERE
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate empty/README-only report 🕵️‍♂️
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const org = process.env.SCAN_ORG;
+            // 1) Fetch all repos in the org
+            const all = await github.paginate(
+              github.rest.repos.listForOrg,
+              { org, per_page: 100 }
+            );
+
+            const empty     = [];
+            const readmeOnly= [];
+
+            for (const repo of all) {
+              let contents;
+              try {
+                // list root directory
+                const res = await github.rest.repos.getContent({
+                  owner: org, repo: repo.name, path: ""
+                });
+                contents = Array.isArray(res.data) ? res.data : [res.data];
+              } catch (e) {
+                // 409 means “empty repo”
+                if (e.status === 409) contents = [];
+                else throw e;
+              }
+
+              if (contents.length === 0) {
+                empty.push(repo.full_name);
+              } else {
+                // filter-out any README* files
+                const nonReadmes = contents.filter(f =>
+                  !/^README(\.[a-z]+)?$/i.test(f.name)
+                );
+                if (nonReadmes.length === 0) {
+                  readmeOnly.push(repo.full_name);
+                }
+              }
+            }
+
+            // 2) Only create an issue if we found some
+            if (empty.length + readmeOnly.length === 0) {
+              console.log("✔ No empty/README-only repos found. Skipping issue.");
+              return;
+            }
+
+            // 3) Build markdown table
+            const today = new Date().toISOString().slice(0,10);
+            let body = `# Repo Health Report for \`${org}\` (${today})\n\n`;
+            body += "| Repository | Status |\n| --- | --- |\n";
+            for (const r of empty)     body += `| ${r} | empty |\n`;
+            for (const r of readmeOnly) body += `| ${r} | README-only |\n`;
+            body += "\n_This issue is generated automatically on the 1st of each month._";
+
+            // 4) Open an issue in THIS repo
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `Empty Repo Check: ${org} (${today})`,
+              body
+            });
