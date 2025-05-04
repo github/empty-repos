@@ -7,9 +7,7 @@ A GitHub Actions workflow that scans all repositories in your organization once 
 
 This helps you spot neglected or placeholder repositories and take action (archive, populate, delete, etc.).
 
----
-
-## 🚀 Features
+## Features
 
 - **Scheduled scan**: runs at 00:00 UTC on the 1st of every month  
 - **Manual trigger**: invoke from the **Actions** tab or via `gh workflow run`  
@@ -17,12 +15,10 @@ This helps you spot neglected or placeholder repositories and take action (archi
 - **Auto-issue creation**: opens a new issue with a Markdown table of results  
 - **Zero dependencies**: uses `actions/github-script`, built-in scheduling and permissions  
 
----
-
-## 🛠️ Installation
+## Installation
 
 1. **Copy** the workflow into this repo, at  
-   `.github/workflows/monthly-repo-health.yml`
+   `.github/workflows/empty-repo.yml`
 
 2. **Update** the organization name to scan:
    ```yaml
