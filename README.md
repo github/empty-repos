@@ -17,7 +17,7 @@ This helps you spot neglected or placeholder repositories and take action (archi
 
 ## Installation
 
-1. **Copy** the workflow into this repo, at  
+1. **Copy** the workflow in this repo, at  
    `.github/workflows/empty-repo.yml`
 
 2. **Update** the organization name to scan:
