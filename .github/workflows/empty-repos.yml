@@ -41,12 +41,15 @@ jobs:
 
             const empty = [], readmeOnly = [];
 
-            for (const r of repos) {
-              // skip by visibility
-              if (visibility === 'public' && r.private) continue;
-              if (visibility === 'private' && !r.private) continue;
+for (const r of repos) {
+  // skip by visibility
+  if (visibility === 'public' && r.private) continue;
+  if (visibility === 'private' && !r.private) continue;
 
-              let contents;
+  if (r.archived) continue; // 👈 skip archived repositories
+
+  let contents;
+  ...
               try {
                 const res = await github.rest.repos.getContent({
                   owner: org, repo: r.name, path: ""
@@ -75,7 +78,7 @@ jobs:
             }
 
             const today = new Date().toISOString().slice(0,10);
-            let body = `# Repo Health Report for \`${org}\` (${today})\n\n`;
+            let body = `# Empty Repo Report for \`${org}\` (${today})\n\n`;
             body += `**Visibility:** ${visibility}\n\n`;
             body += "| Repository | Status |\n| --- | --- |\n";
             for (const u of empty)      body += `| ${u} | empty |\n`;
