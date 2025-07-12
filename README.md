@@ -1,4 +1,4 @@
-# Empty-Repos Workflow
+# Empty Repos Workflow
 
 A GitHub Actions workflow that scans all repositories in your organization once a month (or on-demand) and files an issue listing:
 
