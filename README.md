@@ -24,3 +24,11 @@ This helps you spot neglected or placeholder repositories and take action (archi
    ```yaml
    env:
      SCAN_ORG: my-org-name    # ← set this to your GitHub org
+
+## License
+
+[MIT](LICENSE)
+
+## More OSPO Tools
+
+Looking for more resources for your open source program office (OSPO)? Check out the [`github-ospo`](https://github.com/github/github-ospo) repository for a variety of tools designed to support your needs.
