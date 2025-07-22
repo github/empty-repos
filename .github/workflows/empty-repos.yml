@@ -28,6 +28,7 @@ jobs:
 
     steps:
       - name: Generate empty/README-only report 🕵️
+        id: report
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -93,3 +94,5 @@ jobs:
               title: `Monthly Repo Health: ${org} (${today})`,
               body
             });
+            const jsonReport = JSON.stringify({ org, visibility, date: today, empty, readmeOnly });
+            console.log(`::set-output name=report-json::${jsonReport}`);
