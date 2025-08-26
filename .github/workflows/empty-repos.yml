@@ -27,72 +27,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository 📂
+        uses: actions/checkout@v4
+
       - name: Generate empty/README-only report 🕵️
         id: report
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Load the scanner script
+            const scannerScript = fs.readFileSync(path.join(process.cwd(), 'scripts/empty-repos-scanner.js'), 'utf8');
+            eval(scannerScript);
+            
+            // Create scanner instance and run
+            const scanner = new EmptyReposScanner(github, context);
             const org = process.env.SCAN_ORG;
             const visibility = '${{ github.event.inputs.visibility || 'all' }}';
-            const repos = await github.paginate(
-              github.rest.repos.listForOrg,
-              { org, per_page: 100 }
-            );
-
-            const empty = [], readmeOnly = [];
-
-            for (const r of repos) {
-              // skip by visibility
-              if (visibility === 'public' && r.private) continue;
-              if (visibility === 'private' && !r.private) continue;
-
-              // skip archived repos
-              if (r.archived) continue;
-
-              let contents;
-              try {
-                const res = await github.rest.repos.getContent({
-                  owner: org,
-                  repo: r.name,
-                  path: ""
-                });
-                contents = Array.isArray(res.data) ? res.data : [res.data];
-              } catch (e) {
-                if (e.status === 409) contents = [];  // empty repo
-                else throw e;
-              }
-
-              if (contents.length === 0) {
-                empty.push(r.full_name);
-              } else {
-                const nonReadmes = contents.filter(f =>
-                  !/^README(\.[a-z]+)?$/i.test(f.name)
-                );
-                if (nonReadmes.length === 0) {
-                  readmeOnly.push(r.full_name);
-                }
-              }
-            }
-
-            if (empty.length + readmeOnly.length === 0) {
-              console.log("✔ No matching repos found. Skipping issue.");
-              return;
-            }
-
-            const today = new Date().toISOString().slice(0,10);
-            let body = `# Empty Repo Report for \`${org}\` (${today})\n\n`;
-            body += `**Visibility:** ${visibility}\n\n`;
-            body += "| Repository | Status |\n| --- | --- |\n";
-            for (const u of empty) body += `| ${u} | empty |\n`;
-            for (const u of readmeOnly) body += `| ${u} | README-only |\n`;
-            body += "\n_Automatically generated on the 1st of each month._";
-
-            await github.rest.issues.create({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              title: `Monthly Repo Health: ${org} (${today})`,
-              body
-            });
-            const jsonReport = JSON.stringify({ org, visibility, date: today, empty, readmeOnly });
-            console.log(`::set-output name=report-json::${jsonReport}`);
+            
+            await scanner.run(org, visibility);
