@@ -39,11 +39,6 @@ The scanner logic is separated into `scripts/empty-repos-scanner.js` for maintai
    npm install
    ```
 
-2. **Verify installation**:
-   ```bash
-   node -c scripts/empty-repos-scanner.js
-   ```
-
 ### Running Tests
 
 ```bash
