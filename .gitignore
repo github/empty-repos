@@ -1,0 +1,17 @@
+# Temporary files
+/tmp/
+*.tmp
+
+# Build artifacts (none for this project, but good practice)
+node_modules/
+dist/
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Log files
+*.log
