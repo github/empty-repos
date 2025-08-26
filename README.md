@@ -32,6 +32,18 @@ This helps you spot neglected or placeholder repositories and take action (archi
 
 The scanner logic is separated into `scripts/empty-repos-scanner.js` for maintainability and testing.
 
+### Setting up your environment
+
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+2. **Verify installation**:
+   ```bash
+   node -c scripts/empty-repos-scanner.js
+   ```
+
 ### Running Tests
 
 ```bash
