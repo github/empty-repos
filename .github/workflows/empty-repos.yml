@@ -95,4 +95,4 @@ jobs:
               body
             });
             const jsonReport = JSON.stringify({ org, visibility, date: today, empty, readmeOnly });
-            console.log(`::set-output name=report-json::${jsonReport}`);
+            core.setOutput('report-json', jsonReport);
