@@ -60,7 +60,7 @@ class EmptyReposScanner {
       });
       contents = Array.isArray(res.data) ? res.data : [res.data];
     } catch (e) {
-      if (e.status === 409) {
+      if (e.status === 404) {
         contents = [];  // empty repo
       } else {
         throw e;
