@@ -61,7 +61,7 @@ class MockGitHub {
         const key = `${owner}/${repo}`;
         if (this.mockContents[key] === undefined) {
           const error = new Error('Not Found');
-          error.status = 409;
+          error.status = 404;
           throw error;
         }
         return { data: this.mockContents[key] };
