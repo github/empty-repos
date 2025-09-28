@@ -36,13 +36,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const fs = require('fs');
-            const path = require('path');
-            
-            // Load the scanner script
-            const scannerScript = fs.readFileSync(path.join(process.cwd(), 'scripts/empty-repos-scanner.js'), 'utf8');
-            eval(scannerScript);
-            
+            // Load the scanner module safely
+            const { EmptyReposScanner } = require('./scripts/empty-repos-scanner.js');
+
             // Create scanner instance and run
             const scanner = new EmptyReposScanner(github, context);
             const org = process.env.SCAN_ORG;
