@@ -1,0 +1,30 @@
+permissions:
+  contents: read
+name: "Test Empty Repos Scanner"
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout repository 📂
+        uses: actions/checkout@v5
+      
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: '18'
+      
+      - name: Run tests 🧪
+        run: npm test
+      
+      - name: Validate script syntax 📝
+        run: node -c scripts/empty-repos-scanner.js

@@ -1,0 +1,16 @@
+{
+  "name": "empty-repos-scanner",
+  "version": "1.0.0",
+  "description": "GitHub Actions workflow to scan for empty repositories",
+  "main": "scripts/empty-repos-scanner.js",
+  "scripts": {
+    "test": "node tests/test-runner.js",
+    "test:verbose": "node tests/test-runner.js --verbose"
+  },
+  "keywords": ["github", "actions", "repositories", "scanner"],
+  "author": "GitHub",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
