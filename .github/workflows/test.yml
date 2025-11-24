@@ -13,18 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    
+
     steps:
       - name: Checkout repository 📂
-        uses: actions/checkout@v5
-      
-      - name: Setup Node.js 🔧
-        uses: actions/setup-node@v4.4.0
+        uses: actions/checkout@v6
         with:
-          node-version: '18'
-      
+          persist-credentials: false
+
+      - name: Setup Node.js 🔧
+        uses: actions/setup-node@v6.0.0
+        with:
+          node-version: '24'
+
       - name: Run tests 🧪
         run: npm test
-      
+
       - name: Validate script syntax 📝
         run: node -c scripts/empty-repos-scanner.js
