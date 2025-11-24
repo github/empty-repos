@@ -27,16 +27,3 @@ updates:
         update-types:
           - "minor"
           - "patch"
-  - package-ecosystem: "docker"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "chore(deps)"
-    labels: ["docker", "dependencies"]
-    groups:
-      dependencies:
-        applies-to: version-updates
-        update-types:
-          - "minor"
-          - "patch"
