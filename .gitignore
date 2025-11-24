@@ -15,3 +15,5 @@ dist/
 
 # Log files
 *.log
+
+.tool-versions

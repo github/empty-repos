@@ -7,10 +7,15 @@
     "test": "node tests/test-runner.js",
     "test:verbose": "node tests/test-runner.js --verbose"
   },
-  "keywords": ["github", "actions", "repositories", "scanner"],
+  "keywords": [
+    "github",
+    "actions",
+    "repositories",
+    "scanner"
+  ],
   "author": "GitHub",
   "license": "MIT",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=24.0.0"
   }
 }
